@@ -5,6 +5,7 @@ RSpec.describe(Jekyll::Commands::Post) do
   let(:datestamp) { Time.now.strftime('%Y-%m-%d') }
   let(:filename) { "#{datestamp}-a-test-post.md" }
   let(:path) { posts_dir.join(filename) }
+  let(:jekyll_config) {YAML.load_file('../fixtures/_config.yml')}
 
   before(:all) do
     FileUtils.mkdir_p source_dir unless File.directory? source_dir
@@ -42,6 +43,13 @@ RSpec.describe(Jekyll::Commands::Post) do
   it 'creates a new post with the specified layout' do
     capture_stdout { described_class.process(args, 'layout' => 'other-layout') }
     expect(File.read(path)).to match(/layout: other-layout/)
+  end
+
+  it 'creates a new page with the specified config' do
+    expect(Jekyll).to receive(:configuration).and_return(jekyll_config)
+    capture_stdout { described_class.process(args) }
+    expect(File.read(path)).to match(/description: my description/)
+    expect(File.read(path)).to match(/category: /)
   end
 
   it 'should write a helpful message when successful' do

@@ -50,6 +50,8 @@ RSpec.describe(Jekyll::Commands::Draft) do
   it 'creates a new draft with the specified layout' do
     capture_stdout { described_class.process(args, 'layout' => 'other-layout') }
     expect(File.read(path)).to match(/layout: other-layout/)
+    expect(File.read(path)).to match(/description: my description/)
+    expect(File.read(path)).to mathc(/category: /)
   end
 
   context 'when the draft already exists' do

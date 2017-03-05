@@ -55,6 +55,11 @@ module Jekyll
         def _date_stamp
           @params.date.strftime '%Y-%m-%d'
         end
+
+        def content
+          post_front_matter = Jekyll.configuration["post_front_matter"]
+          post_front_matter ? super(post_front_matter) : super
+        end
       end
     end
   end

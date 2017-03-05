@@ -40,6 +40,11 @@ module Jekyll
         def path
           "_drafts/#{file_name}"
         end
+
+        def content
+          post_front_matter = Jekyll.configuration["post_front_matter"]
+          post_front_matter ? super(post_front_matter) : super
+        end
       end
     end
   end
